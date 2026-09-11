@@ -1,0 +1,59 @@
+name: Update README with Repositories
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const readmePath = 'README.md';
+            let readme = fs.readFileSync(readmePath, 'utf8');
+
+            const startMarker = '<!-- REPOS:START -->';
+            const endMarker = '<!-- REPOS:END -->';
+            const startIndex = readme.indexOf(startMarker);
+            const endIndex = readme.indexOf(endMarker);
+
+            if (startIndex === -1 || endIndex === -1) {
+              throw new Error('Markers not found in README.md');
+            }
+
+            const repos = await github.paginate(github.rest.repos.listForUser, {
+              username: context.repo.owner,
+              per_page: 100,
+              sort: 'updated',
+              direction: 'desc'
+            });
+
+            const repoLines = repos
+              .filter(repo => !repo.fork)
+              .map(repo => {
+                const desc = repo.description ? ` — ${repo.description}` : '';
+                const lang = repo.language ? ` \`${repo.language}\`` : '';
+                const stars = repo.stargazers_count > 0 ? ` ⭐ ${repo.stargazers_count}` : '';
+                return `- [**${repo.name}**](${repo.html_url})${desc}${lang}${stars}`;
+              })
+              .join('\n');
+
+            const newContent = `${startMarker}\n\n${repoLines}\n\n${endMarker}`;
+            readme = readme.slice(0, startIndex) + newContent + readme.slice(endIndex + endMarker.length);
+            fs.writeFileSync(readmePath, readme);
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'docs: auto-update repository list'
+          file_pattern: README.md
