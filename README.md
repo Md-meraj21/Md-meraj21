@@ -148,10 +148,10 @@ A fun interactive browser game built while exploring **JavaScript, DOM manipulat
 
 <!-- REPOS:START -->
 
-- [**java**](https://github.com/Md-meraj21/java) `Java`
-- [**Md-meraj21**](https://github.com/Md-meraj21/Md-meraj21)
-- [**Canteen**](https://github.com/Md-meraj21/Canteen) `JavaScript` ⭐ 1
 - [**MyEra**](https://github.com/Md-meraj21/MyEra) `JavaScript`
+- [**Canteen**](https://github.com/Md-meraj21/Canteen) `JavaScript` ⭐ 1
+- [**Md-meraj21**](https://github.com/Md-meraj21/Md-meraj21)
+- [**java**](https://github.com/Md-meraj21/java) `Java`
 - [**MernProject**](https://github.com/Md-meraj21/MernProject) `JavaScript`
 - [**Achievement**](https://github.com/Md-meraj21/Achievement)
 - [**earthquake_R**](https://github.com/Md-meraj21/earthquake_R) `HTML`
